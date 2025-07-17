@@ -1,18 +1,24 @@
+// Import mongoose for schema definition
 const mongoose = require('mongoose')
 
+// Define the schema for shortened URLs
 const urlSchema = new mongoose.Schema({
     shortId: {
-        type: String,
+        type: String, // Unique short ID for the URL
         require: true,
         unique: true,
     },
     redirectURL: {
-        type: String,
+        type: String, // The original long URL
         require: true,
     },
-    visitHistory: [{ timestamp: { type: Number } }] //it is array storing timestamp so that we can check when in got clicked
-}, { timestamps: true }); //so that we know when entry was created
+    visitHistory: [
+        { timestamp: { type: Number } } // Array of timestamps for each visit
+    ]
+}, { timestamps: true }); // Adds createdAt and updatedAt fields
 
+// Create the model from the schema
 const url = mongoose.model("url", urlSchema);
 
+// Export the model
 module.exports = url;

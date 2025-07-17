@@ -1,0 +1,11 @@
+🧠 What is Server-Side Rendering (SSR) in EJS?
+Server-Side Rendering (SSR) in EJS (Embedded JavaScript) means:
+
+Your HTML pages are generated on the server, using dynamic data, before being sent to the user's browser.
+
+🧱 In Practice (How EJS Works with SSR):
+You write an .ejs file (like a template).
+
+Your server (Node.js + Express) uses that file to render a complete HTML page with real data filled in.
+
+The user receives a ready-to-display HTML — no JavaScript is needed on the client to assemble it.

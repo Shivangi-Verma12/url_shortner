@@ -2,11 +2,18 @@ const mongoose = require('mongoose');
 
 async function connectToMongoDB(url) {
     try {
-        await mongoose.connect(url);
+        // Connect to MongoDB with the provided URL
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log("MongoDB connected!");
     } catch (error) {
         console.error("Database connection failed:", error);
     }
 }
 
-module.exports = connectToMongoDB;
+// Export the connection function
+module.exports = {
+    connectToMongoDB,
+}
