@@ -65,9 +65,37 @@
         </form>
         <div class="result" id="result">
             <% if (typeof shortId !=='undefined' && shortId) { %>
-                Short URL: <a href="/<%= shortId %>" target="_blank">/<%= shortId %></a>
+                Short URL: <a href="'http://localhost:8001/'+/<%= shortId %>" target="_blank">/<%= shortId %></a>
                 <% } %>
         </div>
+
+        <% if (typeof urls !=='undefined' && Array.isArray(urls) && urls.length> 0) { %>
+            <div class="url-table">
+                <h3>URL Click Analytics</h3>
+                <table border="1" style="width:100%;margin-top:20px;">
+                    <thead>
+                        <tr>
+                            <th>Short URL</th>
+                            <th>Original URL</th>
+                            <th>Clicks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% urls.forEach(function(url) { %>
+                            <tr>
+                                <td><a href="/<%= url.shortId %>" target="_blank">/<%= url.shortId %></a></td>
+                                <td style="word-break:break-all">
+                                    <%= url.redirectURL %>
+                                </td>
+                                <td>
+                                    <%= url.visitHistory.length %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
     </div>
     <script>
         document.getElementById('shortenForm').addEventListener('submit', async function (e) {
