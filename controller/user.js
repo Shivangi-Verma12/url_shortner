@@ -1,7 +1,8 @@
 // Import required modules
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-
+const { v4: uuidv4 } = require('uuid')
+const { setUser, getUser } = require('../service/auth');
 // Controller for user registration
 async function registerUser(req, res) {
     try {
@@ -39,7 +40,15 @@ async function loginUser(req, res) {
         if (!isMatch) {
             return res.status(400).json({ error: 'incorrect password' });
         }
-        res.redirect('/home');
+        //now we will use cookies or session to store user info
+        const sessionId = uuidv4(); // Generate a unique session ID
+        //need to strore sessionId with the user
+        setUser(sessionId, user); // Store user object with session ID
+        res.cookie('uid', sessionId, {
+            httpOnly: true,
+            sameSite: 'lax' // Ensures it's sent in fetch requests
+        });
+        return res.redirect('/home');
     } catch (err) {
         res.status(500).json({ error: 'Login failed' });
     }

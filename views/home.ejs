@@ -65,7 +65,7 @@
         </form>
         <div class="result" id="result">
             <% if (typeof shortId !=='undefined' && shortId) { %>
-                Short URL: <a href="'http://localhost:8001/'+/<%= shortId %>" target="_blank">/<%= shortId %></a>
+                Short URL: <a href="/<%= shortId %>" target="_blank">/<%= shortId %></a>
                 <% } %>
         </div>
 
@@ -104,14 +104,21 @@
             const response = await fetch('/url', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url })
+                body: JSON.stringify({ url }),
+                credentials: 'include'
             });
-            const data = await response.json();
-            if (response.ok) {
-                document.getElementById('result').innerHTML = `Short URL: <a href = "/${data.shortId}" target = "_blank">/${data.shortId}</a > `;
-                // Clear the input field after successful submission    
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `Short URL: <a href="/${data.shortId}" target="_blank">/${data.shortId}</a>`;
+                    document.getElementById('urlInput').value = '';
+                } else {
+                    document.getElementById('result').textContent = data.error || 'Something went wrong.';
+                }
             } else {
-                document.getElementById('result').textContent = data.error || 'Something went wrong.';
+                // Not JSON, probably got redirected to login
+                window.location.href = '/login';
             }
         });
     </script>

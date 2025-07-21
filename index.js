@@ -1,6 +1,9 @@
 const express = require('express'); 
+const cookieParser = require('cookie-parser'); // Import cookie-parser to handle cookies
 const {connectToMongoDB} = require('./db_connection');
 const URL = require('./models/url'); 
+
+const { restrictToLoggedinUserOnly } = require('./middlewares/auth'); // Import authentication middleware
 
 const urlRoutes = require('./routes/url'); 
 const userRoute = require('./routes/user');
@@ -14,9 +17,10 @@ connectToMongoDB('mongodb://127.0.0.1:27017/short-url'); // Connect to MongoDB d
 // Middleware to parse JSON and URL-encoded bodies from requests
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(cookieParser()); // Use cookie-parser middleware to handle cookies
 
 app.use('/user', userRoute);
-app.use('/url', urlRoutes);
+app.use('/url',restrictToLoggedinUserOnly ,urlRoutes); //this will restrict access to URL routes to logged-in users
 app.use('/', staticRoute);
 
 

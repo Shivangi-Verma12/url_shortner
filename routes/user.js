@@ -2,6 +2,7 @@
 const express = require('express');
 const { registerUser, loginUser } = require('../controller/user');
 
+
 const router = express.Router();
 
 // Route for user registration
