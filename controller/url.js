@@ -17,6 +17,7 @@ async function generateNewShortURL(req, res) {
         shortId: shortId,
         redirectURL: body.url,
         visitHistory: [],
+        createdBy: req.user._id // Store the ID of the user who created the URL(user id will be available in req.user due to authentication middleware)
     });
     // Respond with the generated shortId
     return res.status(201).json({ shortId: shortId });

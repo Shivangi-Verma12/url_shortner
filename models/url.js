@@ -14,7 +14,12 @@ const urlSchema = new mongoose.Schema({
     },
     visitHistory: [
         { timestamp: { type: Number } } // Array of timestamps for each visit
-    ]
+    ],
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId, // Reference to the user who created the URL(urls me ek id denge jo user ko refer kare ga)
+        ref: 'user', // Refers to the User model
+        require: true,
+    }
 }, { timestamps: true }); // Adds createdAt and updatedAt fields
 
 // Create the model from the schema
